@@ -1,7 +1,19 @@
 <?php 
 
+session_start();
+
+
 require "Includes/database.php";
 require "Includes/function.php";
+
+
+
+if(isset($_GET["disconnect"])) {
+    session_destroy();
+    header("Location: index.php");
+    exit();
+}
+
 
 
 ?>
@@ -23,7 +35,6 @@ require "Includes/function.php";
         if(isset($_SESSION['auth'])){
             require "_partials/navbar.php";
             if(isset($_GET['component'])) {
-
                 $component = cleanString($_GET['component']);
                 if(file_exists("Controller/$component.php"))
                 { 

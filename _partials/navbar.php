@@ -18,6 +18,8 @@
                     </li>
                     <li class="nav-item">
                     <a class="nav-link" href=""></a>
+                    <li><a class="nav-link" href="index.php?disconnect=true">Disconnect</a></li>
+
                     </li>
                 </ul>
                 </div>

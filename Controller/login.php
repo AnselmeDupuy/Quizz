@@ -3,27 +3,30 @@
 require "./Model/login.php";
 
 
-$username = !empty($_POST['username']) ? $_POST['username'] : null;
-$password = !empty($_POST['password']) ? $_POST['password'] : null;
+if (!empty($_POST['username']) && !empty($_POST['password'])){
+    $username = !empty($_POST['username']) ? $_POST['username'] : null;
+    $password = !empty($_POST['password']) ? $_POST['password'] : null;
+    if($username !== null && $password !== null){
+        $username = cleanString($username);
+        $password = cleanString($password);
 
-if($username !== null && $password !== null){
-    $username = cleanString($username);
-    $password = cleanString($password);
+        $user = getUser($username, $pdo);
+        if(is_array($user)){
+            $isMatchPassword = is_array($user) && password_verify($password, $user['password']); 
 
-    $user = getUser($username, $pdo);
-    if(is_array($user)){
-        $isMatchPassword = is_array($user) && password_verify($password, $user['password']); 
-
-        if($isMatchPassword ){
-            $_SESSION['auth'] = true;
-            header('Location: index.php');
+            if($isMatchPassword && $user['enabled']){
+                $_SESSION['auth'] = true;
+                header('Location: ?component=quizz');
+                exit();
+            } else {
+                var_dump("invalid connexion");
+            }
         } else {
-            var_dump("invalid connexion");
+            var_dump("Utilisateur invalide");
         }
-    } else {
-        var_dump("Utilisateur invalide");
     }
 }
 
 require "./View/login.php";
+
 ?>

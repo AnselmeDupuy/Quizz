@@ -10,8 +10,8 @@ $faker = Faker\Factory::create('fr_FR');
 
 for ($i = 0; $i <= 1; $i++){
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $query="INSERT INTO users (username, password, group_id) VALUES 
-            (:username, :password, :group_id)";
+    $query="INSERT INTO users (username, password, group_id, enabled) VALUES 
+            (:username, :password, :group_id, :enabled)";
     $prep = $pdo->prepare($query);
 
     $number = 1;
@@ -21,6 +21,7 @@ for ($i = 0; $i <= 1; $i++){
     $prep->bindValue(':username', $faker->FirstName());
     $prep->bindValue(':password', $password);
     $prep->bindValue(':group_id', $number, PDO::PARAM_INT);
+    $prep->bindValue(':enabled', $faker->numberBetween(0, 1));
 
     try
     {
