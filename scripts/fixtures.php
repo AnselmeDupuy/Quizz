@@ -22,9 +22,7 @@ for ($i = 1; $i <= 2; $i++){
     $prep->bindValue(':group_id', $group);
     $prep->bindValue(':enabled', $enabled);
 
-
     $prep->execute();
-
 }
 
 for ($i = 0; $i <= 8; $i++){
@@ -53,4 +51,31 @@ for ($i = 0; $i <= 8; $i++){
     }
     $prep->closeCursor();
 }
+
+for ($i = 0; $i < 10; $i++) {
+    $user = $faker->numberBetween(1,11);
+    $query="INSERT INTO `quizz` (title, published, user_id)  VALUES 
+            (:title, :published, user_id)";
+
+    $prep = $pdo->prepare($query);
+    $prep->bindValue(':title', $faker->words(2, true));
+    $prep->bindValue(':published', $faker->numberBetween(0,1));
+    $prep->bindValue(':user_id', $user);
+
+    try
+    {
+        $prep->execute();
+
+    }
+    catch (PDOException $e)
+    {
+        echo " erreur : ".$e->getCode() .' :</b> '. $e->getMessage();
+    }
+    $prep->closeCursor();
+}
+
+
+
+
+
 ?>
