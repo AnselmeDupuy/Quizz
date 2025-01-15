@@ -1,5 +1,9 @@
 <?php 
 
+/**
+* @var PDO $pdo
+ */
+
 require "./Model/login.php";
 
 

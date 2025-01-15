@@ -57,9 +57,22 @@ function getQuestionId(PDO $pdo, int $questionId)
 
 
 
-function addAnswers(PDO $pdo, array $answer) 
+function addAnswers(PDO $pdo, string $answer, int $isCorrect, int $points, int $questionId) 
 {
-    $state = $pdo->prepare("INSERT INTO `answer` ()");
+    try {
+    $state = $pdo->prepare("INSERT INTO `answer` (`text`, `correct`, `points`, `question_id`)
+    VALUEs (:text, :correct, :points, :questionId)");
+
+    $state->bindValue(':text', $answer);
+    $state->bindValue(':correct', $isCorrect, PDO::PARAM_BOOL);
+    $state->bindValue(':points', $points, PDO::PARAM_INT);
+    $state->bindValue(':questionId', $questionId, PDO::PARAM_INT);
+
+    $state->execute();
+    } catch (Exception $e)
+    {
+        return $e->getMessage();
+    }
 
 }
 
