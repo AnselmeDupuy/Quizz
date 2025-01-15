@@ -6,7 +6,6 @@ session_start();
 require  './vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
-var_dump($_ENV);
 require "Includes/database.php";
 require "Includes/function.php";
 
@@ -43,7 +42,7 @@ if(isset($_GET["disconnect"])) {
                 { 
                     require "Controller/$component.php";
                 } else {
-                    require "Controller/login.php";
+                    require "Controller/home.php";
                 }
             } 
         } else {

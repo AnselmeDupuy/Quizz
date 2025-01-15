@@ -8,18 +8,19 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                        <a class="nav-link active" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="index.php?component=play">Play Quizz</a>
+                        <a class="nav-link" href="index.php?component=play">Play Quizz</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="index.php?component=quizz">Create Quizz</a>
+                        <a class="nav-link" href="index.php?component=quizz">Create Quizz</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href=""></a>
-                    <li><a class="nav-link" href="index.php?disconnect=true">Disconnect</a></li>
-
+                        <a class="nav-link" href="index.php?component=editQuizz">Edit Quizz</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="index.php?disconnect=true">Disconnect</a>
                     </li>
                 </ul>
                 </div>

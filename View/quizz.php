@@ -26,27 +26,4 @@
   </form>
 
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const quizzForm = document.querySelector('#quizz-form')
-      const questionNbBtn = document.querySelector('#question-number-btn')
-      const quizzBtn = document.querySelector('#create-quizz-btn')
-      const dropdownQuestion = documennt.querySelector("#number-question-dropdown")
 
-
-      dropdownQuestion.addEventListener('click', () => {
-        for (let i = 0; i < 10; i++) {
-          dropdownQuestion.
-        }
-        <li><a class="dropdown-item" href="?nombreQuestion=x">Dropdown link</a></li>
-      })
-
-      questionNbBtn.addEventListener('click', async () => {
-
-      })
-
-
-
-  })
-
-  </script>
