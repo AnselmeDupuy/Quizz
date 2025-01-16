@@ -8,6 +8,5 @@
             <button type="button" class="btn btn-primary" id="edit-submit-button">
             Submit
             </button>
-
         </div>
     </div>

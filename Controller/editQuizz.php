@@ -2,8 +2,11 @@
 
 require "./Model/editQuizz.php";
 
-$userId = $_GET['id'];
-
+if (isset($_GET['id'])) {
+    $userId = $_GET['id'];
+} else { 
+    echo ("erreur");
+}
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WIDTH']) &&
     $_SERVER['HTTP_X_REQUESTED_WIDTH'] === 'XMLHttpRequest'
@@ -14,11 +17,10 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WIDTH']) &&
         $errors[] = $userId;
     }
     header('Content-type: application/json');
-    echo json_encode(['results' => $userId, 'count' => $a]);
+    echo json_encode(['results' => $userId]);
     exit();
-}
-
-
+}  else { echo "erreur HTTP-REQUEST edit";}
 
 require "./View/editQuizz.php";
-?>
+
+?> 

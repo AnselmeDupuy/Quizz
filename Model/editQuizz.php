@@ -1,5 +1,14 @@
 <?php 
 
+function getQuizzes(PDO $pdo)
+{
+    try {
+        $state = $pdo->prepare("SELECT * FROM quizz");
+    } catch {
+
+    }
+}
+
 function getQuizzId(PDO $pdo, int $userId)
 {
     try {

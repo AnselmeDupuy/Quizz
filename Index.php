@@ -16,8 +16,6 @@ if(isset($_GET["disconnect"])) {
     exit();
 }
 
-
-
 ?>
 
 <!DOCTYPE HTML>

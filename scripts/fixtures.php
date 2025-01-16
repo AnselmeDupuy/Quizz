@@ -107,7 +107,7 @@ for ($i = 0; $i < 10; $i++) {
     $prep->closeCursor();
 
     echo "création des question lié au quizz".PHP_EOL;
-    for ($y = 0; $y < 5; $y++) {
+    for ($y = 0; $y < $faker->numberBetween(2,8); $y++) {
         $questions = "INSERT INTO `questions` (question, multi, quizz_id) VALUES (:question, :multi, :quizz_id)";
 
         $prepare = $pdo->prepare($questions);
@@ -126,14 +126,19 @@ for ($i = 0; $i < 10; $i++) {
         $prepare->closeCursor();
 
         echo "création des réponses liés au questions".PHP_EOL;
-        for ($x = 0; $x < 10; $x++) {
+        for ($x = 0; $x < $faker->numberBetween(2,10); $x++) {
+            $correct = $faker->numberBetween(0,1);
             $answers = "INSERT INTO `answers` (`text`, correct, points, question_id) VALUES (:text, :correct, :points, :question_id)";
 
             $prep = $pdo->prepare($answers);
             $prep->bindValue(':text', $faker->sentence());
-            $prep->bindValue(':correct', $faker->numberBetween(0,1), PDO::PARAM_BOOL);
-            $prep->bindValue(':points', $faker->numberBetween(1,5), PDO::PARAM_INT);
-            $prep->bindValue(':question_id', $question_id);
+            $prep->bindValue(':correct', $correct, PDO::PARAM_BOOL);
+            if ($correct === 0)
+            {
+                $prep->bindValue(':points', 0, PDO::PARAM_INT);
+            } else {
+                $prep->bindValue(':points', $faker->numberBetween(1,5), PDO::PARAM_INT);
+            }
 
             try
             {

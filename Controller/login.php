@@ -15,11 +15,14 @@ if (!empty($_POST['username']) && !empty($_POST['password'])){
         $password = cleanString($password);
 
         $user = getUser($username, $pdo);
+        var_dump($user);
         if(is_array($user)){
             $isMatchPassword = is_array($user) && password_verify($password, $user['password']); 
 
             if($isMatchPassword && $user['enabled']){
                 $_SESSION['auth'] = true;
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['userId'] = $user['id'];
                 header('Location: ?component=quizz');
                 exit();
             } else {
