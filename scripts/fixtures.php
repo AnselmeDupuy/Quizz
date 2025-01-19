@@ -145,7 +145,7 @@ for ($i = 0; $i < 10; $i++) {
         for ($x = 0; $x < $nbAnswers; $x++) {
             
             if ($multi === 1) {
-                if ($nbCorrect < 2) {
+                if ($nbCorrect < 2 && $nbCorrect < $nbAnswers) {
                     $correct = 1;
                     $nbCorrect++;
                 } else {
