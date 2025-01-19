@@ -2,12 +2,24 @@
 /**
 * @var PDO $pdo
  */
+require "./Index.php";
 require './includes/database.php';
 require  './vendor/autoload.php';
+
+$pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
+
+$pdo->exec('TRUNCATE TABLE users');
+$pdo->exec('TRUNCATE TABLE `groups`');
+$pdo->exec('TRUNCATE TABLE answers');
+$pdo->exec('TRUNCATE TABLE questions');
+$pdo->exec('TRUNCATE TABLE quizz');
+
+$pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
 
 
 $faker = Faker\Factory::create('fr_FR');
 
+$multi = 0;
 
 echo "création des groupes d'utilisateur".PHP_EOL;
 
@@ -107,12 +119,13 @@ for ($i = 0; $i < 10; $i++) {
     $prep->closeCursor();
 
     echo "création des question lié au quizz".PHP_EOL;
-    for ($y = 0; $y < $faker->numberBetween(2,8); $y++) {
+    for ($y = 0; $y < $faker->numberBetween(3,8); $y++) {
+        $multi = $faker->numberBetween(0,1);
         $questions = "INSERT INTO `questions` (question, multi, quizz_id) VALUES (:question, :multi, :quizz_id)";
 
         $prepare = $pdo->prepare($questions);
         $prepare->bindValue(':question', $faker->sentence());
-        $prepare->bindValue(':multi', $faker->numberBetween(0,1));
+        $prepare->bindValue(':multi', $multi);
         $prepare->bindValue(':quizz_id', $quizz_id);
 
         try
@@ -126,8 +139,25 @@ for ($i = 0; $i < 10; $i++) {
         $prepare->closeCursor();
 
         echo "création des réponses liés au questions".PHP_EOL;
-        for ($x = 0; $x < $faker->numberBetween(2,10); $x++) {
-            $correct = $faker->numberBetween(0,1);
+        $nbAnswers = $faker->numberBetween(2, 10);
+        $nbCorrectAnswers = 0;
+
+        for ($x = 0; $x < $nbAnswers; $x++) {
+            
+            if ($multi === 1) {
+                if ($nbCorrect < 2) {
+                    $correct = 1;
+                    $nbCorrect++;
+                } else {
+                    $correct = $faker->numberBetween(0, 1);
+                    if ($correct === 1) {
+                        $nbCorrect++;
+                    }
+                }
+            } else {
+                $correct = ($x === 0) ? 1 : 0;
+            }
+
             $answers = "INSERT INTO `answers` (`text`, correct, points, question_id) VALUES (:text, :correct, :points, :question_id)";
 
             $prep = $pdo->prepare($answers);
@@ -139,6 +169,7 @@ for ($i = 0; $i < 10; $i++) {
             } else {
                 $prep->bindValue(':points', $faker->numberBetween(1,5), PDO::PARAM_INT);
             }
+            $prep->bindValue(':question_id', $question_id, PDO::PARAM_INT);
 
             try
             {
