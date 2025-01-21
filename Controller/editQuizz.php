@@ -2,24 +2,25 @@
 
 require "./Model/editQuizz.php";
 
-if (isset($_GET['id'])) {
-    $userId = $_GET['id'];
-} else { 
-    echo ("erreur");
+const LIST_QUIZZ_ITEMS_PER_PAGE = 5;
+
+
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+    $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest'
+){
+    $page = cleanString($_GET['page']) ?? 1;
+    [$persons, $count] = getQuizz($pdo, LIST_QUIZZ_ITEMS_PER_PAGE, $page);
+
+    if (!is_array($persons)) {
+        $errors[] = $persons;
+    }
+    header('Content-Type: application/json');
+    echo json_encode(['results' => $persons, 'count' => $count]);
+    exit();
+} else {
+    echo "erreur Controller editQuizz";
 }
 
-if(!empty($_SERVER['HTTP_X_REQUESTED_WIDTH']) &&
-    $_SERVER['HTTP_X_REQUESTED_WIDTH'] === 'XMLHttpRequest'
-) {
-    $page = cleanString($_GET['page']) ?? 1;
-    $userId = getQuizzId($pdo, $userId);
-    if(is_array($userId)){
-        $errors[] = $userId;
-    }
-    header('Content-type: application/json');
-    echo json_encode(['results' => $userId]);
-    exit();
-}  else { echo "erreur HTTP-REQUEST edit";}
 
 require "./View/editQuizz.php";
 

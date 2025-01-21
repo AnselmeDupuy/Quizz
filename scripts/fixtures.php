@@ -97,7 +97,7 @@ for ($i = 0; $i <= 10; $i++){
 
 echo "creation quizz lié aléatoirement à des users".PHP_EOL;
 
-for ($i = 0; $i < 10; $i++) {
+for ($i = 0; $i < 50; $i++) {
     $user = $faker->numberBetween(1,11);
     $query="INSERT INTO `quizz` (title, published, user_id)  VALUES 
             (:title, :published, :user_id)";
@@ -145,7 +145,7 @@ for ($i = 0; $i < 10; $i++) {
         for ($x = 0; $x < $nbAnswers; $x++) {
             
             if ($multi === 1) {
-                if ($nbCorrect < 2 && $nbCorrect < $nbAnswers) {
+                if ($nbCorrect < 2) {
                     $correct = 1;
                     $nbCorrect++;
                 } else {

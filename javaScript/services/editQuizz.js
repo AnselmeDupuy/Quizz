@@ -1,9 +1,14 @@
-export const getQuizz = async () => {
-    const res = await fetch(`index.php?component=editQuizz`, {
+export const getQuizz = async (currentPage = 1) => {
+    const response = await fetch(`index.php?component=editQuizz&page=${currentPage}`, {
         method: 'GET',
         headers: {
-            'X-Requested-Width': 'XMLHttpRequest'
+            'X-Requested-With': 'XMLHttpRequest'
         }
     })
-    return await res.json()
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return await response.json()
 }

@@ -15,7 +15,7 @@ if (!empty($_POST['username']) && !empty($_POST['password'])){
         $password = cleanString($password);
 
         $user = getUser($username, $pdo);
-        var_dump($user);
+
         if(is_array($user)){
             $isMatchPassword = is_array($user) && password_verify($password, $user['password']); 
 

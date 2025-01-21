@@ -1,13 +1,41 @@
 <?php 
 
-function getQuizzes(PDO $pdo)
+function getQuizz(PDO $pdo,int $itemPerPage, int $page = 1): array | string
 {
-    try {
-        $state = $pdo->prepare("SELECT * FROM quizz");
-    } catch {
+    $offset = (($page - 1) * $itemPerPage);
 
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $query = "SELECT * FROM quizz LIMIT $itemPerPage OFFSET $offset";
+    $prep = $pdo->prepare($query);
+    try
+    {
+        $prep->execute();
     }
+    catch (PDOException $e)
+    {
+        return " erreur 1 : ".$e->getCode() .' :</b> '. $e->getMessage();
+    }
+
+    $quizzes = $prep->fetchAll(PDO::FETCH_ASSOC);
+    $prep->closeCursor();
+
+    $query="SELECT COUNT(*) AS total  FROM quizz";
+    $prep = $pdo->prepare($query);
+    try
+    {
+        $prep->execute();
+    }
+    catch (PDOException $e)
+    {
+        return " erreur 2 : ".$e->getCode() .' :</b> '. $e->getMessage();
+    }
+
+    $count = $prep->fetch(PDO::FETCH_ASSOC);
+    $prep->closeCursor();
+
+    return [$quizzes, $count];
 }
+
 
 function getQuizzId(PDO $pdo, int $userId)
 {

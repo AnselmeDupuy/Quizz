@@ -4,9 +4,64 @@
         <div class="col-sm-10">
             <input type="text" class="form-control form-control-lg" id="quizz-name" placeholder="">
         </div>
+
+        <div class="row">
+            <div class="col d-flex justify-content-center">
+                <div class="spinner-border text-primary d-none" role="status" id="spinner">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+
+
+        <table class="table" id="list-quizz">
+            <tbody>
+
+            </tbody>
+        </table>
+
+
+
+        <div class="row">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center" id="pagination">
+
+                </ul>
+            </nav>
+        </div>
+
+
         <div class="btn-group" role="group" style="width: 2em;">
             <button type="button" class="btn btn-primary" id="edit-submit-button">
             Submit
             </button>
         </div>
     </div>
+    <script src='javaScript/component/editQuizz.js' type="module"></script>
+    <script src="javaScript/services/editQuizz.js" type="module"></script>
+    <script type="module">
+        import {refreshList} from "./javaScript/component/editQuizz.js"
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const previousLink = document.querySelector('#previous-link')
+        const nextLink = document.querySelector('#next-link')
+        let currentPage = 1
+
+        refreshList(currentPage)
+
+        // previousLink.addEventListener('click', async () => {
+        //     if (currentPage > 1) {
+        //         currentPage--
+        //         await refreshList(currentPage)
+        //     }
+        // })
+
+        // nextLink.addEventListener('click', async () => {
+        //     currentPage++
+        //     await refreshList(currentPage)
+
+        // })
+
+    })
+</script>

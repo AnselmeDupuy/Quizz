@@ -16,6 +16,31 @@ if(isset($_GET["disconnect"])) {
     exit();
 }
 
+
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+$_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest'
+) {
+if(!empty($_SESSION['auth'])) {
+    $component = !empty($_GET['component'])
+        ? htmlspecialchars($_GET['component'], ENT_QUOTES, 'UTF-8')
+        : 'home';
+
+    $actionName = !empty($_GET['ajax'])
+        ? htmlspecialchars($_GET['ajax'], ENT_QUOTES, 'UTF-8')
+        : null;
+
+    if (file_exists("controller/$component.php")) {
+        require "controller/$component.php";
+    } else {
+        throw new Exception("Component '$component' does not exist");
+    }
+} else {
+    require "controller/login.php";
+}
+exit();
+}
+
+
 ?>
 
 <!DOCTYPE HTML>
@@ -24,6 +49,7 @@ if(isset($_GET["disconnect"])) {
         <meta charset="UTF-8">
         <title>Quizz</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
 
     <body>
@@ -32,10 +58,20 @@ if(isset($_GET["disconnect"])) {
 
         <?php
 
+
+
+
         if(isset($_SESSION['auth'])){
             require "_partials/navbar.php";
             if(isset($_GET['component'])) {
-                $component = cleanString($_GET['component']);
+                $component = !empty($_GET['component'])
+                    ? htmlspecialchars($_GET['component'], ENT_QUOTES, 'UTF-8')
+                    : 'home';
+                
+                $actionName = !empty($_GET['ajax'])
+                    ? htmlspecialchars($_GET['ajax'], ENT_QUOTES, 'UTF-8')
+                    : null;
+
                 if(file_exists("Controller/$component.php"))
                 { 
                     require "Controller/$component.php";
@@ -46,8 +82,6 @@ if(isset($_GET["disconnect"])) {
         } else {
             require "Controller/login.php";
         }
-
-
 
         ?>
 

@@ -1,67 +1,67 @@
-import {countPage, getQuizz} from "../services/editQuizz.js";
+import {getQuizz} from '../services/editQuizz.js'
 
-const getUser = (user) => {
-    const line = document.createElement('tr')
-    line.innerHTML = `
-    <td>${user.id}</td>
-    <td>${user.usernamme}</td>
-    <td>${user.group_id}</td>
-    <td>${user.enabled}</td>
-
-    <td><a href="index.php?component=user&action=edit&id=${user.id}"><i class="fa-solid fa-pen-to-square text-primary ms-2"></i></a></td>
-    `
-    return line
-}
-
-export const refreshPageusers = async (page) => {
+export const refreshList = async (page = 1) => {
     const spinner = document.querySelector('#spinner')
-    const tableElement = document.querySelector('#liste-user')
-    const tbody = tableElement.querySelector('tbody')
+    const listElement = document.querySelector('#list-quizz')
 
     spinner.classList.remove('d-none')
 
-    const data = await getusers(page)
-    tbody.innerHTML = ''
-    for (let i = 0; i < data.results.length; i++) {
-        tbody.appendChild(getRowuser(data.results[i]))
-    }
-    getPagination(data.count.nbusers, page)
+    const data = await getQuizz(page)
+
+    const quizzes = data.results[0];
+    const total = data.results[1]?.total || 0;
+
+    const listContent = data.results.map((quizzes) => `
+                            <ul class="list-group">
+                                <li class="list-group-item">${quizzes.id} ${quizzes.title} ${quizzes.user_id} ${quizzes.published === 1 ? 'published' : 'not published'}</li>
+                            </ul>
+    `)
+    
+
+    listElement.querySelector('tbody').innerHTML = listContent.join('')
+
+    document.querySelector('#pagination').innerHTML = getPagination(total)
+
+    handlePaginationNavigation(page)
+
     spinner.classList.add('d-none')
 }
 
-const getPagination = (total, page) => {
-    const nbPage = countPage(total)
-    const paginationElement = document.querySelector('#pagination')
-    paginationElement.innerHTML = ''
-    paginationElement.innerHTML += '<li class="page-item"><a class="page-link" href="#" id="prev-link">Previous</a></li>'
+const getPagination = (total) => {
+    const countPages =  Math.ceil(total / 20)
+    let paginationButton = []
+        paginationButton.push(` <li class="page-item"><a class="page-link" href="#" id="previous-link">Précédent</a></li>`)
 
-    for(let i = 0; i < nbPage; i++) {
-        const PagNbElement = `<li class="page-item"><a class="page-link nb-page-link" href="#" data-page="${i+1}">${i+1}</a></li>`
-        paginationElement.innerHTML += PagNbElement
+    for (let i = 1; i <= countPages; i++){
+        paginationButton.push(`<li class="page-item"><a data-page="${i}" class="page-link pagination-btn" href="#">${i}</a></li>`)
     }
-    paginationElement.innerHTML += '<li class="page-item"><a class="page-link" href="#" id="next-link">Next</a></li>'
-    handlePaginationClick(page)
+
+    paginationButton.push(` <li class="page-item"><a class="page-link" href="#" id="next-link">Suivant</a></li>`)
+
+    return paginationButton.join('')
 }
 
-const handlePaginationClick = (curentPage) => {
+const handlePaginationNavigation = (page) => {
+    const previousLink = document.querySelector('#previous-link')
     const nextLink = document.querySelector('#next-link')
-    const previousLink = document.querySelector('#prev-link')
-    const nbPageLink = document.querySelectorAll('.nb-page-link')
+    const paginationBtns = document.querySelectorAll('.pagination-btn')
 
     previousLink.addEventListener('click', async () => {
-        if(curentPage > 1) {
-            curentPage--
-            await refreshPageusers(curentPage)
+        if (page > 1 ){
+            page--
+            await refreshList(page)
         }
     })
-    nextLink.addEventListener('click', async () => {
-        curentPage++
-        await refreshPageusers(curentPage)
-    })
 
-    nbPageLink.forEach(btn => {
-        btn.addEventListener('click', async (e) => {
-            await refreshPageusers(e.target.getAttribute("data-page"))
+    for (let i = 0; i < paginationBtns.length; i++){
+        paginationBtns[i].addEventListener('click', async (e) => {
+            const pageNumber = e.target.getAttribute('data-page')
+            await refreshList(pageNumber)
         })
+    }
+
+    nextLink.addEventListener('click', async () => {
+        page++
+        await refreshList(page)
     })
 }
