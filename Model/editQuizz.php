@@ -4,8 +4,9 @@ function getQuizzes(PDO $pdo)
 {
     try {
         $state = $pdo->prepare("SELECT * FROM quizz");
-    } catch {
-
+        $state->execute();
+    } catch (Exception $e) {
+        return $e->getMessage();
     }
 }
 
