@@ -8,27 +8,36 @@ export const refreshList = async (page = 1) => {
 
     const data = await getQuizz(page)
 
-    const quizzes = data.results[0];
-    const total = data.results[1]?.total || 0;
+    const total = data.count?.total || 0;
 
-    const listContent = data.results.map((quizzes) => `
-                            <ul class="list-group">
-                                <li class="list-group-item">${quizzes.id} ${quizzes.title} ${quizzes.user_id} ${quizzes.published === 1 ? 'published' : 'not published'}</li>
-                            </ul>
+    const listContent = data.results.map((quizz) => `
+    <ul class="list-group">
+        <li class="list-group-item quizz-list" role="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse-${quizz.id}" data-editQuizz-id="${quizz.id}"
+         aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">${quizz.id} ${quizz.title} ${quizz.user_id} ${quizz.published === 1 ? 'published' : 'not published'} 
+         <i class="fa-solid fa-chevron-down"></i><i class="fa-solid fa-chevron-right d-none"></i> </li> 
+    </ul>
+    <div class="row">
+        <div class="row">
+        <div class="collapse multi-collapse-${quizz.id}" id="multiCollapseExample1">
+        <div class="card card-body">
+            <p class="multi-collapse${quizz.id}">TEST</p>
+        </div>
+        </div>
+    </div>
+    </div>
     `)
-    
 
     listElement.querySelector('tbody').innerHTML = listContent.join('')
 
     document.querySelector('#pagination').innerHTML = getPagination(total)
 
-    handlePaginationNavigation(page)
+    handlePaginationNavigation(page, Math.ceil(total / 5))
 
     spinner.classList.add('d-none')
 }
 
 const getPagination = (total) => {
-    const countPages =  Math.ceil(total / 20)
+    const countPages =  Math.ceil(total / 5)
     let paginationButton = []
         paginationButton.push(` <li class="page-item"><a class="page-link" href="#" id="previous-link">Précédent</a></li>`)
 
@@ -41,7 +50,7 @@ const getPagination = (total) => {
     return paginationButton.join('')
 }
 
-const handlePaginationNavigation = (page) => {
+const handlePaginationNavigation = (page, countPages) => {
     const previousLink = document.querySelector('#previous-link')
     const nextLink = document.querySelector('#next-link')
     const paginationBtns = document.querySelectorAll('.pagination-btn')
@@ -60,8 +69,19 @@ const handlePaginationNavigation = (page) => {
         })
     }
 
+    const quizzList = document.querySelectorAll('.quizz-list')
+    for (let i = 0; i < quizzList.length; i++){
+        quizzList[i].addEventListener('click', async (e) => {
+            const quizzId = e.target.getAttribute('data-editQuizz-id')
+
+            console.log(quizzId)
+        })
+    }
+
     nextLink.addEventListener('click', async () => {
+        if (page < countPages){
         page++
         await refreshList(page)
+    }
     })
 }

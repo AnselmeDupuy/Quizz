@@ -38,6 +38,53 @@
             </button>
         </div>
     </div>
+
+
+
+
+
+
+    <ul class="list-group">
+        <li class="list-group-item" role="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">${quizzes.id} ${quizzes.title} ${quizzes.user_id} ${quizzes.published === 1 ? 'published' : 'not published'} <i class="fa-solid fa-chevron-down"></i><i class="fa-solid fa-chevron-right d-none"></i> </li> 
+    </ul>
+    <div class="row">
+    <div class="row">
+        <div class="collapse multi-collapse" id="multiCollapseExample1">
+        <div class="card card-body">
+            Some placeholder content for the first collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+        </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="collapse multi-collapse" id="multiCollapseExample2">
+        <div class="card card-body">
+            Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+    <div class="row">
+        <div class="collapse multi-collapse-${quizzes.id}" id="multiCollapseExample1">
+        <div class="card card-body">
+            Some placeholder content for the first collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+        </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="collapse multi-collapse-${quizzes.id}" id="multiCollapseExample2">
+        <div class="card card-body">
+            Some placeholder content for the second collapse component of this multi-collapse example. This panel is hidden by default but revealed when the user activates the relevant trigger.
+        </div>
+        </div>
+    </div>
+
+
+
+
+
+    
     <script src='javaScript/component/editQuizz.js' type="module"></script>
     <script src="javaScript/services/editQuizz.js" type="module"></script>
     <script type="module">
@@ -46,22 +93,7 @@
     document.addEventListener('DOMContentLoaded', async () => {
         const previousLink = document.querySelector('#previous-link')
         const nextLink = document.querySelector('#next-link')
-        let currentPage = 1
 
-        refreshList(currentPage)
-
-        // previousLink.addEventListener('click', async () => {
-        //     if (currentPage > 1) {
-        //         currentPage--
-        //         await refreshList(currentPage)
-        //     }
-        // })
-
-        // nextLink.addEventListener('click', async () => {
-        //     currentPage++
-        //     await refreshList(currentPage)
-
-        // })
-
+        await refreshList()
     })
 </script>

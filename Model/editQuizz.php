@@ -38,7 +38,7 @@ function getQuizz(PDO $pdo,int $itemPerPage, int $page = 1): array | string
 
 
 function getQuizzId(PDO $pdo, int $userId)
-{
+{   
     try {
     $state = $pdo->prepare("SELECT * FROM quizz WHERE user_id = ':id'");
     $state->bindValue(':id', $userId);
@@ -48,11 +48,11 @@ function getQuizzId(PDO $pdo, int $userId)
     }
 }
 
-function getQuestionId(PDO $pdo, int $questionId)
+function getQuestion(PDO $pdo, int $quizzId)
 {
     try {
     $state = $pdo->prepare("SELECT * FROM question WHERE id = ':questionId'");
-    $state->bindValue(':quizzId', $questionId);
+    $state->bindValue(':quizzId', $quizzId);
     $state->execute();
     } catch (Exception $e) {
         return $e->getMessage();

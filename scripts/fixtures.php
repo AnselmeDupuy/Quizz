@@ -145,13 +145,13 @@ for ($i = 0; $i < 50; $i++) {
         for ($x = 0; $x < $nbAnswers; $x++) {
             
             if ($multi === 1) {
-                if ($nbCorrect < 2) {
+                if ($nbCorrectAnswers < 2) {
                     $correct = 1;
-                    $nbCorrect++;
+                    $nbCorrectAnswers++;
                 } else {
                     $correct = $faker->numberBetween(0, 1);
                     if ($correct === 1) {
-                        $nbCorrect++;
+                        $nbCorrectAnswers++;
                     }
                 }
             } else {
@@ -181,8 +181,6 @@ for ($i = 0; $i < 50; $i++) {
             $prep->closeCursor();
         }
     }
-
-
 }
 
 ?>
