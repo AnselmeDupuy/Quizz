@@ -14,7 +14,7 @@ export const getQuizz = async (currentPage = 1) => {
 }
 
 export const getQuestion = async (quizzId) => {
-    const response = await fetch(`index.php?component=editQuizz&object=question&id=${quizzId}`, {
+    const response = await fetch(`index.php?component=editQuizz&object=question&quizz-id=${quizzId}`, {
         method: 'GET',
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
@@ -29,7 +29,7 @@ export const getQuestion = async (quizzId) => {
 }
 
 export const getAnswers = async (questionId) => {
-    const response = await fetch(`index.php?component=editQuizz&object=question&id=${questionId}`, {
+    const response = await fetch(`index.php?component=editQuizz&object=answer&id=${questionId}`, {
         method: 'GET',
         headers: {
             'X-Requested-With': 'XMLHttpRequest'

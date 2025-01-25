@@ -8,20 +8,32 @@ const LIST_QUIZZ_ITEMS_PER_PAGE = 5;
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
     $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest'
 ){
-    $page = cleanString($_GET['page']) ?? 1;
-    [$quizz, $count] = getQuizz($pdo, LIST_QUIZZ_ITEMS_PER_PAGE, $page);
+    if (isset($_GET['page'])){
+        $page = cleanString($_GET['page']) ?? 1;
+        [$quizz, $count] = getQuizz($pdo, LIST_QUIZZ_ITEMS_PER_PAGE, $page);
 
-
-
-    if (!is_array($quizz)) {
-        $errors[] = $quizz;
+        if (!is_array($quizz)) {
+            $errors[] = $quizz;
+        }
+        header('Content-Type: application/json');
+        echo json_encode(['results' => $quizz, 'count' => $count]);
+        exit();
     }
-    header('Content-Type: application/json');
-    echo json_encode(['results' => $quizz, 'count' => $count]);
-    exit();
-} 
 
+    if (!empty($_GET['object']) && (cleanString($_GET['object']) === 'question')) {
+
+        if (!empty($_GET['quizz-id'])) {
+            $quizzId = getQuestion($pdo,cleanString((int)$_GET['quizz-id']));
+            
+            header('Content-Type: application/json');
+            echo json_encode(['quizzId' => $quizzId]);
+            exit();
+        }
+    }
+
+
+} 
 
 require "./View/editQuizz.php";
 
-?> 
+ 

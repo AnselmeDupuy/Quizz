@@ -1,4 +1,4 @@
-import {getQuizz} from '../services/editQuizz.js'
+import {getQuizz, getQuestion, getAnswers} from '../services/editQuizz.js'
 
 export const refreshList = async (page = 1) => {
     const spinner = document.querySelector('#spinner')
@@ -74,14 +74,18 @@ const handlePaginationNavigation = (page, countPages) => {
         quizzList[i].addEventListener('click', async (e) => {
             const quizzId = e.target.getAttribute('data-editQuizz-id')
 
-            console.log(quizzId)
+            const questionId = await getQuestion(quizzId)
+            console.log(questionId[0])
+            // await getAnswers(questionId)
         })
     }
 
     nextLink.addEventListener('click', async () => {
         if (page < countPages){
-        page++
-        await refreshList(page)
-    }
+            page++
+            await refreshList(page)
+        }
     })
 }
+
+

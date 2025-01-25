@@ -36,35 +36,51 @@ function getQuizz(PDO $pdo,int $itemPerPage, int $page = 1): array | string
     return [$quizzes, $count];
 }
 
-
-function getQuizzId(PDO $pdo, int $userId)
-{   
-    try {
-    $state = $pdo->prepare("SELECT * FROM quizz WHERE user_id = ':id'");
-    $state->bindValue(':id', $userId);
-    $state->execute();
-    } catch (Exception $e) {
-        return $e->getMessage();
-    }
-}
-
 function getQuestion(PDO $pdo, int $quizzId)
 {
     try {
-    $state = $pdo->prepare("SELECT * FROM question WHERE id = ':questionId'");
+    $state = $pdo->prepare("SELECT * FROM `questions` WHERE quizz_id = :quizzId");
     $state->bindValue(':quizzId', $quizzId);
     $state->execute();
+
+    $questions = $state->fetchAll(PDO::FETCH_ASSOC);
+    $state->closeCursor();
+
     } catch (Exception $e) {
         return $e->getMessage();
     }
+
+    $query="SELECT COUNT(*) AS total FROM `questions` WHERE quizz_id = :quizzId";
+    $state = $pdo->prepare($query);
+    $state->bindValue(':quizzId', $quizzId);
+
+    try
+    {
+        $state->execute();
+    }
+    catch (PDOException $e)
+    {
+        return " erreur 2 : ".$e->getCode() .' :</b> '. $e->getMessage();
+    }
+
+    $count = $state->fetch();
+    $state->closeCursor();
+
+    return [$questions, $count];
 }
 
-function getAnswerId(PDO $pdo, int $answerId)
+function getAnswer(PDO $pdo, int $questionId)
 {
     try {
-    $state = $pdo->prepare("SELECT * FROM answers WHERE id = ':answerId'");
-    $state->bindValue(':answerId', $answerId);
+    $state = $pdo->prepare("SELECT * FROM answers WHERE id = :questionId");
+    $state->bindValue(':questionId', $questionId);
     $state->execute();
+
+    $answers = $state->fetchAll(PDO::FETCH_ASSOC);
+    $state->closeCursor();
+
+    return $answers;
+
     } catch (Exception $e) {
         return $e->getMessage();
     }

@@ -95,5 +95,6 @@
         const nextLink = document.querySelector('#next-link')
 
         await refreshList()
+
     })
 </script>
