@@ -31,6 +31,17 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
         }
     }
 
+    if (!empty($_GET['object']) && (cleanString($_GET['object']) === 'answer')) {
+
+        if (!empty($_GET['question-id'])) {
+            $questionId = getAnswer($pdo,cleanString((int)$_GET['question-id']));
+            
+            header('Content-Type: application/json');
+            echo json_encode(['question-id' => $questionId]);
+            exit();
+        }
+    }
+
 
 } 
 

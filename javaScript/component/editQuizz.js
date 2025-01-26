@@ -74,9 +74,20 @@ const handlePaginationNavigation = (page, countPages) => {
         quizzList[i].addEventListener('click', async (e) => {
             const quizzId = e.target.getAttribute('data-editQuizz-id')
 
-            const questionId = await getQuestion(quizzId)
-            console.log(questionId[0])
-            // await getAnswers(questionId)
+            const { ids } = await getQuestion(quizzId)
+            console.log(ids)
+            try {     
+                if (Array.isArray(ids)) { // Ensure ids is an array
+                    for (const id of ids) {
+                        const answers = await getAnswers(id)
+                        console.log(`Answers for question ${id}:`, answers)
+                    }
+                } else {
+                    console.error('ids is not an array:', ids)
+                }
+            } catch (error) {
+                console.error('Error fetching questions or answers:', error)
+            }
         })
     }
 
