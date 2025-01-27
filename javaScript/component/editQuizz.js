@@ -77,14 +77,11 @@ const handlePaginationNavigation = (page, countPages) => {
             const { ids } = await getQuestion(quizzId)
             console.log(ids)
             try {     
-                if (Array.isArray(ids)) { // Ensure ids is an array
-                    for (const id of ids) {
-                        const answers = await getAnswers(id)
-                        console.log(`Answers for question ${id}:`, answers)
-                    }
-                } else {
-                    console.error('ids is not an array:', ids)
+                for (const id of ids) {
+                    const answers = await getAnswers(id)
+                    console.log(`Answers for question ${id}:`, answers)
                 }
+
             } catch (error) {
                 console.error('Error fetching questions or answers:', error)
             }
