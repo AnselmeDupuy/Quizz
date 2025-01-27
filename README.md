@@ -14,3 +14,16 @@ A modifier/ajouter:
 
     Ajout jouer au quizz
 
+    Ajout gestion user
+
+    ajout création quizz
+
+    Drag and drop dans editQuizz
+
+    Partie jouer:
+
+        affichage résultat doughnut à la fin
+
+        possibilité de rejouer
+
+        

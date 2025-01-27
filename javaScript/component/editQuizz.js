@@ -8,7 +8,7 @@ export const refreshList = async (page = 1) => {
 
     const data = await getQuizz(page)
 
-    const total = data.count?.total || 0;
+    const total = data.count?.total || 0
 
     const listContent = data.results.map((quizz) => `
     <ul class="list-group">
@@ -18,12 +18,12 @@ export const refreshList = async (page = 1) => {
     </ul>
     <div class="row">
         <div class="row">
-        <div class="collapse multi-collapse-${quizz.id}" id="multiCollapseExample1">
-        <div class="card card-body">
-            <p class="multi-collapse${quizz.id}">TEST</p>
+        <div class="collapse multi-collapse-${quizz.id}" id="collapse-container-${quizz.id}">
+            <div class="card card-body">
+                <p class="multi-collapse${quizz.id}">TEST</p>
+            </div>
         </div>
         </div>
-    </div>
     </div>
     `)
 
@@ -73,20 +73,31 @@ const handlePaginationNavigation = (page, countPages) => {
     for (let i = 0; i < quizzList.length; i++){
         quizzList[i].addEventListener('click', async (e) => {
             const quizzId = e.target.getAttribute('data-editQuizz-id')
+            const questions = await getQuestion(quizzId)
 
-            const { ids } = await getQuestion(quizzId)
-            console.log(ids)
-            try {     
-                if (Array.isArray(ids)) { // Ensure ids is an array
-                    for (const id of ids) {
-                        const answers = await getAnswers(id)
-                        console.log(`Answers for question ${id}:`, answers)
-                    }
-                } else {
-                    console.error('ids is not an array:', ids)
+            console.log(quizzId)
+            console.log(questions)
+
+            const container = document.getElementById(`collapse-container-${quizzId}`)
+
+            container.innerHTML = ''
+
+            try {
+                for (let i = 0; i < questions.quizzId.length; i++) {
+                    const answers = await getAnswers(questions.id)
+                    console.log(questions.quizzId[i].id, questions.quizzId[i].question)
+
+                    const question = document.createElement('div')
+                    question.classList.add('row')
+                    question.innerHTML = `
+                        <div class="card card-body">
+                            <p class="multi-collapse${quizzId}">${questions.quizzId[i].id}</p>
+                        </div>
+                    `
+                    container.appendChild(question)
                 }
             } catch (error) {
-                console.error('Error fetching questions or answers:', error)
+                console.error('Error fetching answers:', error)
             }
         })
     }

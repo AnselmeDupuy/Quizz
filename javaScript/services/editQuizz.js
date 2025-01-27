@@ -25,13 +25,7 @@ export const getQuestion = async (quizzId) => {
         throw new Error(`HTTP error! status: ${response.status}`)
     }
 
-    const data = await response.json()
-
-    const ids = data.quizzId[0].map(question => question.id)
-    const questions = data.quizzId[0].map(question => question.question)
-    const multis = data.quizzId[0].map(question => question.multi)
-
-    return { ids, questions, multis }
+    return await response.json()
 
 
 }
