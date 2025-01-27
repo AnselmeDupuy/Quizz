@@ -1,3 +1,4 @@
+
 import {getQuizz, getQuestion, getAnswers} from '../services/editQuizz.js'
 
 export const refreshList = async (page = 1) => {
@@ -95,5 +96,6 @@ const handlePaginationNavigation = (page, countPages) => {
         }
     })
 }
+
 
 

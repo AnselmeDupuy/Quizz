@@ -1,8 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
-    
 
-
-})
 
 export const login = async ( ) => {
     const formData = new URLSearchParams();

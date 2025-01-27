@@ -2,6 +2,7 @@
 
 function getQuizz(PDO $pdo,int $itemPerPage, int $page = 1): array | string
 {
+
     $offset = (($page - 1) * $itemPerPage);
 
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -14,6 +15,7 @@ function getQuizz(PDO $pdo,int $itemPerPage, int $page = 1): array | string
     catch (PDOException $e)
     {
         return " erreur 1 : ".$e->getCode() .' :</b> '. $e->getMessage();
+
     }
 
     $quizzes = $prep->fetchAll(PDO::FETCH_ASSOC);
