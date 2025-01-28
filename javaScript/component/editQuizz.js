@@ -1,3 +1,4 @@
+
 import {getQuizz, getQuestion, getAnswers} from '../services/editQuizz.js'
 
 export const refreshList = async (page = 1) => {
@@ -71,6 +72,7 @@ const handlePaginationNavigation = (page, countPages) => {
     for (let i = 0; i < quizzList.length; i++){
         quizzList[i].addEventListener('click', async (e) => {
             const quizzId = e.target.getAttribute('data-editQuizz-id')
+
             const questions = await getQuestion(quizzId)
 
             const container = document.getElementById(`collapse-container-${quizzId}`)
@@ -119,6 +121,7 @@ const handlePaginationNavigation = (page, countPages) => {
                     // </div>`
                     container.appendChild(answerContainer)
                 }
+
             } catch (error) {
                 console.error('Error fetching answers:', error)
             }
@@ -142,5 +145,6 @@ const handlePaginationNavigation = (page, countPages) => {
         }
     })
 }
+
 
 
