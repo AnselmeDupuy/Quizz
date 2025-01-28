@@ -6,7 +6,6 @@ session_start();
 require  './vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
-var_dump($_ENV);
 require "Includes/database.php";
 require "Includes/function.php";
 
@@ -18,6 +17,27 @@ if(isset($_GET["disconnect"])) {
 }
 
 
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+$_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest'
+) {
+if(!empty($_SESSION['auth'])) {
+    $componentName = !empty($_GET['component'])
+        ? htmlspecialchars($_GET['component'], ENT_QUOTES, 'UTF-8')
+        : 'home';
+
+    $objectName = !empty($_GET['object']) ? htmlspecialchars($_GET['object'], ENT_QUOTES, 'UTF-8') : 'home';
+        
+    if (file_exists("controller/$componentName.php")) {
+        require "controller/$componentName.php";
+    } else {
+        throw new Exception("Component '$componentName' does not exist");
+    }
+} else {
+    require "controller/login.php";
+}
+exit();
+}
+
 
 ?>
 
@@ -26,7 +46,8 @@ if(isset($_GET["disconnect"])) {
     <head>
         <meta charset="UTF-8">
         <title>Quizz</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link href="includes/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="includes/fontawesome-free-6.7.1-web/css/all.min.css" />
     </head>
 
     <body>
@@ -35,28 +56,36 @@ if(isset($_GET["disconnect"])) {
 
         <?php
 
+
+
+
         if(isset($_SESSION['auth'])){
             require "_partials/navbar.php";
             if(isset($_GET['component'])) {
-                $component = cleanString($_GET['component']);
+                $component = !empty($_GET['component'])
+                    ? htmlspecialchars($_GET['component'], ENT_QUOTES, 'UTF-8')
+                    : 'home';
+                
+                $actionName = !empty($_GET['ajax'])
+                    ? htmlspecialchars($_GET['ajax'], ENT_QUOTES, 'UTF-8')
+                    : null;
+
                 if(file_exists("Controller/$component.php"))
                 { 
                     require "Controller/$component.php";
                 } else {
-                    require "Controller/login.php";
+                    require "Controller/home.php";
                 }
             } 
         } else {
             require "Controller/login.php";
         }
 
-
-
         ?>
 
             </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    </body>
+            <script src="includes/js/bootstrap.bundle.min.js"></script>
+        </body>
 
 
 </html>
