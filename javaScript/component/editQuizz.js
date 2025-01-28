@@ -12,15 +12,15 @@ export const refreshList = async (page = 1) => {
 
     const listContent = data.results.map((quizz) => `
     <ul class="list-group">
-        <li class="list-group-item quizz-list" role="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse-${quizz.id}" data-editQuizz-id="${quizz.id}"
-         aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">${quizz.id} ${quizz.title} ${quizz.user_id} ${quizz.published === 1 ? 'published' : 'not published'} 
+        <li class="list-group-item quizz-list"  role="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse-${quizz.id}" data-editQuizz-id="${quizz.id}"
+         aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Id: ${quizz.id} Title:  ${quizz.title} User:  ${quizz.user_id} ${quizz.published === 1 ? 'published' : 'not published'} 
          <i class="fa-solid fa-chevron-down"></i><i class="fa-solid fa-chevron-right d-none"></i> </li> 
     </ul>
     <div class="row">
         <div class="row">
         <div class="collapse multi-collapse-${quizz.id}" id="collapse-container-${quizz.id}">
             <div class="card card-body">
-                <p class="multi-collapse${quizz.id}">TEST</p>
+              
             </div>
         </div>
         </div>
@@ -75,23 +75,22 @@ const handlePaginationNavigation = (page, countPages) => {
             const quizzId = e.target.getAttribute('data-editQuizz-id')
             const questions = await getQuestion(quizzId)
 
-            console.log(quizzId)
-            console.log(questions)
-
             const container = document.getElementById(`collapse-container-${quizzId}`)
-
             container.innerHTML = ''
 
             try {
-                for (let i = 0; i < questions.quizzId.length; i++) {
-                    const answers = await getAnswers(questions.id)
-                    console.log(questions.quizzId[i].id, questions.quizzId[i].question)
+                for (let j = 0; j < questions.quizzId[0].length; j++) {
+                    const  questionsData = questions.quizzId[0][j]
+                    const answers = await getAnswers(questionsData.id)
 
                     const question = document.createElement('div')
                     question.classList.add('row')
                     question.innerHTML = `
-                        <div class="card card-body">
-                            <p class="multi-collapse${quizzId}">${questions.quizzId[i].id}</p>
+                        <div class="card card-body" >
+                            <p class="multi-collapse${quizzId}">${questionsData.question}? ${questionsData.multi === 1 ? 'multiple anwers' : 'unique answer'}</p>
+                            <ul>
+                                ${answers['question-id'][0].map(answer => `<li>${answer.text}, 'correct: '${answer.correct === 1 ? 'true' : 'false'},'points: ', ${answer.points} </li>`).join('')}
+                            </ul>
                         </div>
                     `
                     container.appendChild(question)

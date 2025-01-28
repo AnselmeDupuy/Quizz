@@ -60,7 +60,7 @@ function getQuestion(PDO $pdo, int $quizzId)
     }
     catch (PDOException $e)
     {
-        return " erreur 2 : ".$e->getCode() .' :</b> '. $e->getMessage();
+        return " erreur 1 : ".$e->getCode() .' :</b> '. $e->getMessage();
     }
 
     $count = $state->fetch();
@@ -72,18 +72,35 @@ function getQuestion(PDO $pdo, int $quizzId)
 function getAnswer(PDO $pdo, int $questionId)
 {
     try {
-    $state = $pdo->prepare("SELECT * FROM answers WHERE id = :questionId");
+    $state = $pdo->prepare("SELECT * FROM `answers` WHERE question_id = :questionId");
     $state->bindValue(':questionId', $questionId);
     $state->execute();
 
     $answers = $state->fetchAll(PDO::FETCH_ASSOC);
     $state->closeCursor();
 
-    return $answers;
-
     } catch (Exception $e) {
         return $e->getMessage();
     }
+
+    $query="SELECT COUNT(*) AS total FROM `answers` WHERE question_id = :questionId";
+    $state = $pdo->prepare($query);
+    $state->bindValue(':questionId', $questionId);
+
+    try
+    {
+        $state->execute();
+    }
+    catch (PDOException $e)
+    {
+        return " erreur 2 : ".$e->getCode() .' :</b> '. $e->getMessage();
+    }
+
+    $count = $state->fetch();
+    $state->closeCursor();
+
+
+    return [$answers, $count];
 }
 
 function updateQuizz(PDO $pdo, int $quizzId, string $title, bool $published)
