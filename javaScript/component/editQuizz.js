@@ -9,22 +9,20 @@ export const refreshList = async (page = 1) => {
 
     const data = await getQuizz(page)
 
-    const total = data.count?.total || 0;
+    const total = data.count?.total || 0
 
     const listContent = data.results.map((quizz) => `
     <ul class="list-group">
-        <li class="list-group-item quizz-list" role="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse-${quizz.id}" data-editQuizz-id="${quizz.id}"
-         aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">${quizz.id} ${quizz.title} ${quizz.user_id} ${quizz.published === 1 ? 'published' : 'not published'} 
+        <li class="list-group-item quizz-list"  role="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse-${quizz.id}" data-editQuizz-id="${quizz.id}"
+         aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Id: ${quizz.id} Title:  ${quizz.title} User:  ${quizz.user_id} ${quizz.published === 1 ? 'published' : 'not published'} 
          <i class="fa-solid fa-chevron-down"></i><i class="fa-solid fa-chevron-right d-none"></i> </li> 
     </ul>
     <div class="row">
         <div class="row">
-        <div class="collapse multi-collapse-${quizz.id}" id="multiCollapseExample1">
-        <div class="card card-body">
-            <p class="multi-collapse${quizz.id}">TEST</p>
+        <div class="collapse multi-collapse-${quizz.id}" id="collapse-container-${quizz.id}">
+
         </div>
         </div>
-    </div>
     </div>
     `)
 
@@ -75,19 +73,70 @@ const handlePaginationNavigation = (page, countPages) => {
         quizzList[i].addEventListener('click', async (e) => {
             const quizzId = e.target.getAttribute('data-editQuizz-id')
 
-            const { ids } = await getQuestion(quizzId)
-            console.log(ids)
-            try {     
-                for (const id of ids) {
-                    const answers = await getAnswers(id)
-                    console.log(`Answers for question ${id}:`, answers)
+            const questions = await getQuestion(quizzId)
+
+            const container = document.getElementById(`collapse-container-${quizzId}`)
+            const questionContainer = document.createElement('div')
+            questionContainer.classList.add('row')
+
+            const  questionsData = questions.quizzId[0][0]
+
+            questionContainer.innerHTML = ``
+
+            questionContainer.innerHTML = `
+            <div>
+            <span class="input-group-text multi-collapse-${quizzId}">Question: <input value="${questionsData.question}"></input></span>
+            </div>
+            <div id="answer-container-${questionsData.id}">
+            </div>
+            `
+            container.appendChild(questionContainer)
+            console.log(questionsData)
+
+            try {
+                for (let j = 0; j < questions.quizzId[0].length; j++) {
+
+                    const answers = await getAnswers(questionsData.id)
+
+                    const answer = answers['question-id'][0][i]
+                    const answerContainer = document.createElement('div')
+                    answerContainer.classList.add('row')
+                    answerContainer.innerHTML = ``
+                    answerContainer.innerHTML = `
+                        <div class="card card-body draggable" draggable="true" style="margin-left: 2em">
+                            <div>
+                                <span class="input-group-text">Answer: <input type="text" style="width: 100%;" value="${answer.text}"></input></span>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="correct-answer-${answer.id}" ${answer.correct === 1 ? 'checked' : ' '}>
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Correct</label>
+                            </div>
+                        </div>
+                    `
+                    // `<div class="card card-body" draggable="true">
+                    //     <p class="multi-collapse${quizzId}">${questionsData.question}? ${questionsData.multi === 1 ? 'multiple anwers' : 'unique answer'}</p>
+                    //     <ul>
+                    //         ${answers['question-id'][0].map(answer => `<li>${answer.text}, 'correct: '${answer.correct === 1 ? 'true' : 'false'},'points: ', ${answer.points} </li>`).join('')}
+                    //     </ul>
+                    // </div>`
+                    container.appendChild(answerContainer)
                 }
 
             } catch (error) {
-                console.error('Error fetching questions or answers:', error)
+                console.error('Error fetching answers:', error)
             }
         })
     }
+
+    const draggables = document.querySelectorAll(".draggable")
+    draggables.forEach(draggable => {
+    draggable.addEventListener("dragstart", function() {
+        this.classList.add("dragging")
+    })
+    draggable.addEventListener("dragend", function() {
+        this.classList.remove("dragging")
+    })
+    })
 
     nextLink.addEventListener('click', async () => {
         if (page < countPages){
