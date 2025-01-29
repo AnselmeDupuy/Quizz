@@ -1,10 +1,5 @@
     <form method="post" id="quizz-edit-form">
     <div class="row mb-3">
-        <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Quizz Name</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control form-control-lg" id="quizz-name" placeholder="">
-        </div>
-
         <div class="row">
             <div class="col d-flex justify-content-center">
                 <div class="spinner-border text-primary d-none" role="status" id="spinner">
