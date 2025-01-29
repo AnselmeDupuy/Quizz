@@ -1,3 +1,4 @@
+
 import {getQuizz, getQuestion, getAnswers} from '../services/editQuizz.js'
 
 export const refreshList = async (page = 1) => {
@@ -72,6 +73,7 @@ const handlePaginationNavigation = (page, countPages) => {
     for (let i = 0; i < quizzList.length; i++){
         quizzList[i].addEventListener('click', async (e) => {
             const quizzId = e.target.getAttribute('data-editQuizz-id')
+
             const questions = await getQuestion(quizzId)
 
             for (let y = 0; y < questions.quizzId[0].length; y++){
@@ -143,5 +145,6 @@ const handlePaginationNavigation = (page, countPages) => {
         }
     })
 }
+
 
 
