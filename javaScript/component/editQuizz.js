@@ -68,59 +68,60 @@ const handlePaginationNavigation = (page, countPages) => {
     }
 
     const quizzList = document.querySelectorAll('.quizz-list')
+
     for (let i = 0; i < quizzList.length; i++){
         quizzList[i].addEventListener('click', async (e) => {
             const quizzId = e.target.getAttribute('data-editQuizz-id')
             const questions = await getQuestion(quizzId)
 
-            const container = document.getElementById(`collapse-container-${quizzId}`)
-            const questionContainer = document.createElement('div')
-            questionContainer.classList.add('row')
+            for (let y = 0; y < questions.quizzId[0].length; y++){
 
-            const  questionsData = questions.quizzId[0][0]
+                const container = document.getElementById(`collapse-container-${quizzId}`)
+                const questionContainer = document.createElement('div')
+                questionContainer.classList.add('row')
 
-            questionContainer.innerHTML = ``
+                const  questionsData = questions.quizzId[0][y]
 
-            questionContainer.innerHTML = `
-            <div>
-            <span class="input-group-text multi-collapse-${quizzId}">Question: <input value="${questionsData.question}"></input></span>
-            </div>
-            <div id="answer-container-${questionsData.id}">
-            </div>
-            `
-            container.appendChild(questionContainer)
-            console.log(questionsData)
+                questionContainer.innerHTML = ``
 
-            try {
-                for (let j = 0; j < questions.quizzId[0].length; j++) {
+                questionContainer.innerHTML = `
+                <div>
+                <span class="input-group-text multi-collapse-${quizzId}">Question: <input value="${questionsData.question}"></input></span>
+                </div>
+                <div id="answer-container-${questionsData.id}">
+                </div>
+                `
+                container.appendChild(questionContainer)
+            
 
-                    const answers = await getAnswers(questionsData.id)
+                const answers = await getAnswers(questionsData.id)
+                const answer = answers['question-id'][0][y]
 
-                    const answer = answers['question-id'][0][i]
-                    const answerContainer = document.createElement('div')
-                    answerContainer.classList.add('row')
-                    answerContainer.innerHTML = ``
-                    answerContainer.innerHTML = `
-                        <div class="card card-body draggable" draggable="true" style="margin-left: 2em">
-                            <div>
-                                <span class="input-group-text">Answer: <input type="text" style="width: 100%;" value="${answer.text}"></input></span>
+                try {
+                    for (let j = 0; j < answers.length; j++) {
+
+                        console.log(answer.text)
+
+                        const answerContainer = document.createElement('div')
+                        answerContainer.classList.add('row')
+                        answerContainer.innerHTML = ``
+                        answerContainer.innerHTML = `
+                            <div class="card card-body draggable" draggable="true" style="margin-left: 2em">
+                                <div>
+                                    <span class="input-group-text">Answer: <input type="text" style="width: 100%;" value="${answer.text}"></input></span>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="correct-answer-${answer.id}" ${answer.correct === 1 ? 'checked' : ' '}>
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">Correct</label>
+                                </div>
                             </div>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="correct-answer-${answer.id}" ${answer.correct === 1 ? 'checked' : ' '}>
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Correct</label>
-                            </div>
-                        </div>
-                    `
-                    // `<div class="card card-body" draggable="true">
-                    //     <p class="multi-collapse${quizzId}">${questionsData.question}? ${questionsData.multi === 1 ? 'multiple anwers' : 'unique answer'}</p>
-                    //     <ul>
-                    //         ${answers['question-id'][0].map(answer => `<li>${answer.text}, 'correct: '${answer.correct === 1 ? 'true' : 'false'},'points: ', ${answer.points} </li>`).join('')}
-                    //     </ul>
-                    // </div>`
-                    container.appendChild(answerContainer)
+                        `
+
+                        questionContainer.appendChild(answerContainer)
+                    }
+                } catch (error) {
+                    console.error('Error fetching answers:', error)
                 }
-            } catch (error) {
-                console.error('Error fetching answers:', error)
             }
         })
     }
