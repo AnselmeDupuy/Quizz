@@ -20,7 +20,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
         exit();
     }
 
-    if (!empty($_GET['object']) && (cleanString($_GET['object']) === 'question')) {
+    if (!empty($_GET['object'] === 'question')) {
 
         if (!empty($_GET['quizz-id'])) {
             $quizzId = getQuestion($pdo,cleanString((int)$_GET['quizz-id']));

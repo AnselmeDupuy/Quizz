@@ -23,7 +23,7 @@
         </div>
 
         <div class="btn-group" role="group" style="width: 2em;">
-            <button type="button" class="btn btn-primary" id="edit-submit-button">
+            <button type="submit" class="btn btn-primary" id="edit-submit-button">
             Submit
             </button>
         </div>

@@ -89,8 +89,14 @@ const handlePaginationNavigation = (page, countPages) => {
 
                 questionContainer.innerHTML = `
                 <div>
-                <span style="margin-bottom: 1em; margin-top: 1em; color:blue; margin-left: 2em;" class="input-group-text multi-collapse-${quizzId}">Question: <input style="margin-left: 2em; width: 80%; border: none;" value="${questionsData.question}"></input></span>
+                    <span style="margin-bottom: 1em; margin-top: 1em; color:blue; margin-left: 2em;" class="input-group-text multi-collapse-${quizzId}">Question: <input style="margin-left: 2em; width: 80%; border: none;" value="${questionsData.question}"></input>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch"  ${questionsData.multi === 1 ? 'checked' : ' '}>
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Multiple Choice</label>
+                    </div>
+                    </span>
                 </div>
+
                 <div id="answer-container-${questionsData.id}">
                 </div>
                 `

@@ -66,7 +66,7 @@ for ($i = 1; $i <= 2; $i++){
         $prep->closeCursor();
 }
 
-echo "creation 11 users".PHP_EOL;
+echo "creation users".PHP_EOL;
 
 for ($i = 0; $i <= 10; $i++){
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -119,7 +119,7 @@ for ($i = 0; $i < 50; $i++) {
     $prep->closeCursor();
 
     echo "création des question lié au quizz".PHP_EOL;
-    for ($y = 0; $y < $faker->numberBetween(3,8); $y++) {
+    for ($y = 0; $y < $faker->numberBetween(3,5); $y++) {
         $multi = $faker->numberBetween(0,1);
         $questions = "INSERT INTO `questions` (question, multi, quizz_id) VALUES (:question, :multi, :quizz_id)";
 
@@ -139,7 +139,7 @@ for ($i = 0; $i < 50; $i++) {
         $prepare->closeCursor();
 
         echo "création des réponses liés au questions".PHP_EOL;
-        $nbAnswers = $faker->numberBetween(2, 10);
+        $nbAnswers = $faker->numberBetween(2, 5);
         $nbCorrectAnswers = 0;
 
         for ($x = 0; $x < $nbAnswers; $x++) {
