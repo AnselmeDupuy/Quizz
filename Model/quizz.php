@@ -14,7 +14,7 @@ function createQuizz(PDO $pdo, string $title, int $userId)
     }
 }
 
-function getQuizzId(PDO $pdo, int $quizzId)
+function getQuizz(PDO $pdo, int $quizzId)
 {
     try {
     $state = $pdo->prepare("SELECT id FROM quizz WHERE id = ':quizzId'");
@@ -56,7 +56,6 @@ function getQuestionId(PDO $pdo, int $questionId)
 }
 
 
-
 function addAnswers(PDO $pdo, string $answer, int $isCorrect, int $points, int $questionId) 
 {
     try {
@@ -73,8 +72,6 @@ function addAnswers(PDO $pdo, string $answer, int $isCorrect, int $points, int $
     {
         return $e->getMessage();
     }
-
 }
-
 
 ?>
