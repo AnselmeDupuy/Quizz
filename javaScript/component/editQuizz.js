@@ -1,5 +1,5 @@
 
-import {getQuizz, getQuestion, getAnswers} from '../services/editQuizz.js'
+import {getQuizz, getQuestion, getAnswers, updateQuizz, updateQuestion, updateAnswer} from '../services/editQuizz.js'
 
 export const refreshList = async (page = 1) => {
     const spinner = document.querySelector('#spinner')
@@ -14,11 +14,13 @@ export const refreshList = async (page = 1) => {
     const listContent = data.results.map((quizz) => `
     <ul class="list-group">
         <li class="list-group-item quizz-list" style="height: 4em; display: flex; align-items: center; border-radius: 15px;" role="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse-${quizz.id}" data-editQuizz-id="${quizz.id}" 
-         aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Quizz Title: <input value="${quizz.title}" style="border:none; width: 80%; margin-left: 1em; margin-right: 1em;"></input> <i class="fa-solid fa-chevron-down fa-lg"></i><i class="fa-solid fa-chevron-right fa-lg d-none"></i></li>
+         aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Quizz Title: ${quizz.title}<i class="fa-solid fa-chevron-down fa-lg"></i><i class="fa-solid fa-chevron-right fa-lg d-none"></i></li>
     </ul>
     <div class="row">
         <div class="row">
+        <input class="d-none" id="quizz-title-${quizz.id}" value="${quizz.title}" style=" width: 80%; margin-left: 1em; margin-right: 1em;"></input>
         <div class="collapse multi-collapse-${quizz.id}" id="collapse-container-${quizz.id}">
+        
 
         </div>
         </div>
@@ -57,7 +59,7 @@ const handlePaginationNavigation = (page, countPages) => {
         if (page > 1 ){
             page--
             await refreshList(page)
-        }
+        } 
     })
 
     for (let i = 0; i < paginationBtns.length; i++){
@@ -72,6 +74,21 @@ const handlePaginationNavigation = (page, countPages) => {
     try {
 
     for (let i = 0; i < quizzList.length; i++){
+        quizzList[i].addEventListener('click', async (e) => {
+            
+            const quizzTitle = e.target.getAttribute('aria-expanded')
+            const quizzTitleId = document.getElementById(`quizz-title-${e.target.getAttribute('data-editQuizz-id')}`)
+            console.log(quizzTitle)
+            console.log(quizzTitleId)
+
+            if (quizzTitle === 'true'){
+                quizzTitleId.classList.remove('d-none')
+                e.target.setAttribute('aria-expanded', 'false')
+            } else {
+                quizzTitleId.classList.add('d-none')
+                e.target.setAttribute('aria-expanded', 'true')
+            }
+        })
         quizzList[i].addEventListener('click', async (e) => {
 
             const quizzId = e.target.getAttribute('data-editQuizz-id')
@@ -136,6 +153,22 @@ const handlePaginationNavigation = (page, countPages) => {
             page++
             await refreshList(page)
         }
+    })
+}
+
+
+export const updateAll = () => {
+    const validBtn = document.querySelector('#edit-submit-button')
+    let result, message
+
+    validBtn.addEventListener('click', async(e) => {
+        const form = document.querySelector('#quizz-edit-form')
+
+        result = await updateQuizz(form, e.target.getAttribute('data-id'))
+        updateQuestion(form, )
+        updateAnswer(form, )
+        message = 'La personne a été modifié avec succès'
+
     })
 }
 

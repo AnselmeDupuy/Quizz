@@ -44,3 +44,56 @@ export const getAnswers = async (questionId) => {
 
     return await response.json()
 }
+
+
+export const updateQuizz = async (form, quizzId, title, published) => {
+    const data = new FormData(form)
+
+    const response = await fetch(`index.php?component=editQuizz&action=updateQuizz`, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: data
+    })
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return await response.json()
+}
+
+export const updateQuestion = async (form, questionId, question, multi) => {
+    const data = new FormData(form)
+    const response = await fetch(`index.php?component=editQuizz&action=updateQuestion`, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: data
+    })
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return await response.json()
+}
+
+export const updateAnswer = async (form, answerId, text, correct, points) => {
+    const data = new FormData(form)
+    const response = await fetch(`index.php?component=editQuizz&action=updateAnswer`, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: data
+    })
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    return await response.json()
+}

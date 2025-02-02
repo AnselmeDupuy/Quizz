@@ -14,18 +14,22 @@
             </tbody>
         </table>
 
+        <button type="button" style="    
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            width: 200px;
+            z-index: 1000;" 
+        class="btn btn-primary" id="edit-submit-button">
+                Enregistrer
+        </button>
+
         <div class="row">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center" id="pagination">
 
                 </ul>
             </nav>
-        </div>
-
-        <div class="btn-group" role="group" style="width: 2em;">
-            <button type="submit" class="btn btn-primary" id="edit-submit-button">
-            Submit
-            </button>
         </div>
     </div>
 
