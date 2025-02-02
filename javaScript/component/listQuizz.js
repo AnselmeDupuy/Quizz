@@ -1,5 +1,5 @@
 
-import {getQuizz, getQuestion, getAnswers, updateQuizz, updateQuestion, updateAnswer} from '../services/editQuizz.js'
+import {getQuizz, getQuestion, getAnswers, updateQuizz, updateQuestion, updateAnswer} from '../services/listQuizz.js'
 
 export const refreshList = async (page = 1) => {
     const spinner = document.querySelector('#spinner')
@@ -13,9 +13,21 @@ export const refreshList = async (page = 1) => {
 
     const listContent = data.results.map((quizz) => `
     <ul class="list-group">
-        <li class="list-group-item quizz-list" style="height: 4em; display: flex; align-items: center; border-radius: 15px;" role="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse-${quizz.id}" data-editQuizz-id="${quizz.id}" 
-         aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Quizz Title: ${quizz.title}<i class="fa-solid fa-chevron-down fa-lg"></i><i class="fa-solid fa-chevron-right fa-lg d-none"></i></li>
-    </ul>
+        <li class="list-group-item quizz-list" style="height: 4em; display: flex; justify-content: space-between; align-items: center; border-radius: 15px;" 
+        role="button" 
+        data-bs-toggle="collapse" 
+        data-bs-target=".multi-collapse-${quizz.id}" 
+        data-listQuizz-id="${quizz.id}" 
+        aria-expanded="false" 
+        aria-controls="multiCollapseExample1 multiCollapseExample2">Quizz Title: ${quizz.title}
+        <a style="justify-self: flex-end;" href="index.php?component=editQuizz&id=${quizz.id}">
+            <i class="fa fa-edit text-success"></i>
+        </a>
+        <i class="fa-solid fa-chevron-down fa-lg"></i>
+        <i class="fa-solid fa-chevron-right fa-lg d-none"></i>
+        </li>
+
+        </ul>
     <div class="row">
         <div class="row">
         <input class="d-none" id="quizz-title-${quizz.id}" value="${quizz.title}" style=" width: 80%; margin-left: 1em; margin-right: 1em;"></input>
@@ -75,23 +87,8 @@ const handlePaginationNavigation = (page, countPages) => {
 
     for (let i = 0; i < quizzList.length; i++){
         quizzList[i].addEventListener('click', async (e) => {
-            
-            const quizzTitle = e.target.getAttribute('aria-expanded')
-            const quizzTitleId = document.getElementById(`quizz-title-${e.target.getAttribute('data-editQuizz-id')}`)
-            console.log(quizzTitle)
-            console.log(quizzTitleId)
 
-            if (quizzTitle === 'true'){
-                quizzTitleId.classList.remove('d-none')
-                e.target.setAttribute('aria-expanded', 'false')
-            } else {
-                quizzTitleId.classList.add('d-none')
-                e.target.setAttribute('aria-expanded', 'true')
-            }
-        })
-        quizzList[i].addEventListener('click', async (e) => {
-
-            const quizzId = e.target.getAttribute('data-editQuizz-id')
+            const quizzId = e.target.getAttribute('data-listQuizz-id')
             const questions = await getQuestion(quizzId)
             const container = document.getElementById(`collapse-container-${quizzId}`)
 
@@ -106,9 +103,9 @@ const handlePaginationNavigation = (page, countPages) => {
 
                 questionContainer.innerHTML = `
                 <div>
-                    <span style="margin-bottom: 1em; margin-top: 1em; color:blue; margin-left: 2em;" class="input-group-text multi-collapse-${quizzId}">Question: <input style="margin-left: 2em; width: 80%; border: none;" value="${questionsData.question}"></input>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch"  ${questionsData.multi === 1 ? 'checked' : ' '}>
+                    <span style="margin-bottom: 1em; margin-top: 1em; color:blue; margin-left: 2em;" class="input-group-text multi-collapse-${quizzId}">Question: ${questionsData.question}
+                    <div class="form-check form-switch" style="margin-left: 12em;">
+                        <input class="form-check-input" type="checkbox" role="switch"  ${questionsData.multi === 1 ? 'checked' : ' '} disabled>
                         <label class="form-check-label" for="flexSwitchCheckDefault">Multiple Choice</label>
                     </div>
                     </span>
@@ -131,10 +128,10 @@ const handlePaginationNavigation = (page, countPages) => {
                     answerContainer.innerHTML = `
                         <div style="margin: 0.3em; margin-left: 4em; background-color:#F8F8F8;" class="card card-body draggable" draggable="true" style="margin-left: 2em">
                             <div>
-                                <span style="border:none;" class="input-group-text">Answer: <input type="text" style="width: 100%; margin-left: 0.5em;" value="${answer.text}"></input></span>
+                                <span style="border:none;" class="input-group-text">Answer ${j+1}: ${answer.text}</span>
                             </div>
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="correct-answer-${answer.id}" ${answer.correct === 1 ? 'checked' : ' '}>
+                                <input class="form-check-input" type="checkbox" role="switch" id="correct-answer-${answer.id}" ${answer.correct === 1 ? 'checked' : ' '} disabled>
                                 <label class="form-check-label" for="flexSwitchCheckDefault">Correct</label>
                             </div>
                         </div>
@@ -157,20 +154,6 @@ const handlePaginationNavigation = (page, countPages) => {
 }
 
 
-export const updateAll = () => {
-    const validBtn = document.querySelector('#edit-submit-button')
-    let result, message
-
-    validBtn.addEventListener('click', async(e) => {
-        const form = document.querySelector('#quizz-edit-form')
-
-        result = await updateQuizz(form, e.target.getAttribute('data-id'))
-        updateQuestion(form, )
-        updateAnswer(form, )
-        message = 'La personne a été modifié avec succès'
-
-    })
-}
 
 
 

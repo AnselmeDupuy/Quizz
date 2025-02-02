@@ -17,7 +17,7 @@
                         <a class="nav-link" href="index.php?component=quizz">Create Quizz</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php?component=editQuizz">Edit Quizz</a>
+                        <a class="nav-link" href="index.php?component=listQuizz">Edit Quizz</a>
                     </li>
                     <li>
                         <a class="nav-link" href="index.php?disconnect=true">Disconnect</a>

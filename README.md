@@ -1,29 +1,18 @@
+
+A faire avant de pouvoir acceder à la page:
+
+    - faire "composer install".
+
+    - créé et compléter un fichier ".env"; Prendre comme exemple ".env.dist" présent à la racine.
+
+    - lancer le script "php scripts/fixtures.php" pour générer des données.
+
+    - FontAwesome et bootstrap inclue, MCD à la racine du projet.
+
+
+
 connexion en tant qu'administrateur:
 admin / admin
 
-connexion en tant que User: 
-user1 / user1
 
 
-
-A modifier/ajouter:
-
-    page publique pour jouer au quizz
-
-    auth spécial admin/user, suppréssion navbar côté user OU cacher les liens edit/creat + sécuriser les liens create/edit.
-
-    Ajout jouer au quizz
-
-    Ajout gestion user
-
-    ajout création quizz
-
-    Drag and drop dans editQuizz
-
-    Partie jouer:
-
-        affichage résultat doughnut à la fin
-
-        possibilité de rejouer
-
-        

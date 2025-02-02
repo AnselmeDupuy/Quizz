@@ -1,5 +1,5 @@
 export const getQuizz = async (currentPage = 1) => {
-    const response = await fetch(`index.php?component=editQuizz&page=${currentPage}`, {
+    const response = await fetch(`index.php?component=listQuizz&page=${currentPage}`, {
         method: 'GET',
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
@@ -14,7 +14,7 @@ export const getQuizz = async (currentPage = 1) => {
 }
 
 export const getQuestion = async (quizzId) => {
-    const response = await fetch(`index.php?component=editQuizz&object=question&quizz-id=${quizzId}`, {
+    const response = await fetch(`index.php?component=listQuizz&object=question&quizz-id=${quizzId}`, {
         method: 'GET',
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
@@ -31,7 +31,7 @@ export const getQuestion = async (quizzId) => {
 }
 
 export const getAnswers = async (questionId) => {
-    const response = await fetch(`index.php?component=editQuizz&object=answer&question-id=${questionId}`, {
+    const response = await fetch(`index.php?component=listQuizz&object=answer&question-id=${questionId}`, {
         method: 'GET',
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
@@ -49,7 +49,7 @@ export const getAnswers = async (questionId) => {
 export const updateQuizz = async (form, quizzId, title, published) => {
     const data = new FormData(form)
 
-    const response = await fetch(`index.php?component=editQuizz&action=updateQuizz`, {
+    const response = await fetch(`index.php?component=listQuizz&action=updateQuizz`, {
         method: 'POST',
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
@@ -66,7 +66,7 @@ export const updateQuizz = async (form, quizzId, title, published) => {
 
 export const updateQuestion = async (form, questionId, question, multi) => {
     const data = new FormData(form)
-    const response = await fetch(`index.php?component=editQuizz&action=updateQuestion`, {
+    const response = await fetch(`index.php?component=listQuizz&action=updateQuestion`, {
         method: 'POST',
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
@@ -83,7 +83,7 @@ export const updateQuestion = async (form, questionId, question, multi) => {
 
 export const updateAnswer = async (form, answerId, text, correct, points) => {
     const data = new FormData(form)
-    const response = await fetch(`index.php?component=editQuizz&action=updateAnswer`, {
+    const response = await fetch(`index.php?component=listQuizz&action=updateAnswer`, {
         method: 'POST',
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
